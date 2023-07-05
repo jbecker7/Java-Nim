@@ -4,49 +4,66 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    public static void wait(int ms) {
+        try {
+            System.out.println(" ");
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Random rand = new Random();
-        int One = rand.nextInt(1, 7);
-        int Two = rand.nextInt(1, 7);
-        int Three = rand.nextInt(1, 7);
         System.out.println("Welcome to Nim!");
+        wait(1000);
+        System.out.println("How many piles?");
+        wait(1000);
+        int pileNumber = Integer.parseInt(scanner.nextLine());
+        int[] piles = new int[pileNumber];
+        for (int i = 0; i < pileNumber; i++) {
+            piles[i] = rand.nextInt(1, 7);
+        }
+        wait(1000);
         System.out.println("Enter Player Names");
         String playerA = scanner.nextLine();
         String playerB = scanner.nextLine();
+        wait(1000);
         System.out.println("Hello, " + playerA);
+        wait(1000);
         System.out.println("Hello, " + playerB);
+        wait(1000);
 
         String activePlayer = playerA;
 
-        while (One > 0 || Two > 0 || Three > 0) {
-            System.out.println("One: " + One);
-            System.out.println("Two: " + Two);
-            System.out.println("Three: " + Three);
+        while (true) {
+            // Check if all piles are empty
+            int check = 0;
+            for (int pile : piles) {
+                check += pile;
+            }
+
+            if (check < 1) {
+                break; // Game ends when all piles are empty
+            }
+
+            for (int i = 0; i < pileNumber; i++) {
+                System.out.println("Pile " + (i + 1) + ": " + piles[i]);
+            }
+            wait(1000);
 
             System.out.println(activePlayer + "'s Choice of Pile");
-            String pileChoice = scanner.nextLine();
+            int pileChoice = Integer.parseInt(scanner.nextLine());
 
             int availableItems;
-            if (pileChoice.equals("One")) {
-                availableItems = One;
-            } else if (pileChoice.equals("Two")) {
-                availableItems = Two;
-            } else {
-                availableItems = Three;
-            }
+            availableItems = piles[pileChoice - 1];
 
             while (availableItems == 0) {
                 System.out.println("Invalid choice. Please select a pile with items.");
-                pileChoice = scanner.nextLine();
-
-                if (pileChoice.equals("One")) {
-                    availableItems = One;
-                } else if (pileChoice.equals("Two")) {
-                    availableItems = Two;
-                } else {
-                    availableItems = Three;
-                }
+                int pileChoice2 = Integer.parseInt(scanner.nextLine());
+                availableItems = piles[pileChoice2 - 1];
+                pileChoice = pileChoice2; // Update pileChoice with the new valid choice
             }
 
             System.out.println(activePlayer + "'s Choice of How Many To Take");
@@ -57,21 +74,15 @@ public class Main {
                 choice = Integer.parseInt(scanner.nextLine());
             }
 
-            if (pileChoice.equals("One")) {
-                One -= choice;
-            } else if (pileChoice.equals("Two")) {
-                Two -= choice;
-            } else {
-                Three -= choice;
-            }
+            piles[pileChoice - 1] -= choice;
 
             // Switch active player for the next turn
             activePlayer = (activePlayer.equals(playerA)) ? playerB : playerA;
         }
 
-        // Determine the loser based on the final state of the piles
-        String loser = activePlayer;
+        // The activePlayer at this point is the loser, because the game ended on their
+        // turn
         System.out.println("Game Over");
-        System.out.println(loser + " loses!");
+        System.out.println(activePlayer + " wins!");
     }
 }
