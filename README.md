@@ -1,2 +1,4 @@
 # Java-Nim
-[Nim](https://en.wikipedia.org/wiki/Nim) is a fun strategy game. For some Java practice, I implemented it while looking at as little documentation as possible. I had to double-check some of the scanner and random stuff, but it was okay othewise.
+[Nim](https://en.wikipedia.org/wiki/Nim) is a fun strategy game. In this currently text-based version, two players can play with an arbitrary number of piles.
+
+In the future, I want to make a GUI for it with JavaFX or Swing.
